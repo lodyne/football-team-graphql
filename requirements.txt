@@ -1,0 +1,11 @@
+asgiref==3.8.1
+Django==5.2.1
+django-schema-viewer==0.5.3
+graphql-core==3.2.6
+packaging==25.0
+python-dateutil==2.9.0.post0
+six==1.17.0
+sqlparse==0.5.3
+strawberry-graphql==0.270.1
+strawberry-graphql-django==0.59.1
+typing_extensions==4.13.2
