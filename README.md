@@ -38,11 +38,12 @@ A starter Python project for building GraphQL APIs.
 
 ## Project Structure
 
-team-graphql/
+```team-graphql/
 ├── app.py
 ├── schema.py
 ├── requirements.txt
 └── README.md
+```
 
 ## License
 
