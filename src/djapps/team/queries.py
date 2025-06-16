@@ -2,6 +2,7 @@ import strawberry
 
 from djapps.team.exceptions import ErrorByIdResponse, ErrorException
 from djapps.team.services import retrieve_player_with_specific_age
+from djapps.team.utils import paginated_queryset
 from .models import (
     Coach, 
     League, 
@@ -12,7 +13,15 @@ from .models import (
     Match
 )
 from strawberry.types import Info
-from .types.django_types import CoachType, LeagueType, MatchType, PlayerType, SquadType, TournamentType, VenueType
+from .types.django_types import(
+    CoachType,
+    LeagueType, 
+    MatchType, 
+    PlayerType, 
+    SquadType, 
+    TournamentType, 
+    VenueType
+)
 
 @strawberry.type
 class Query:
@@ -35,11 +44,28 @@ class Query:
             raise ValueError(f"Squad with id {id} does not exist.")
         
     @strawberry.field
-    def league_list(self, info:Info) -> list[LeagueType]:
+    def league_list(self, info:Info, order:str = None) -> list[LeagueType]:
         """
         Get all leagues.
         """
-        return League.objects.all()
+        queryset = League.objects.all()
+        if order in ["id", "-id"]:  
+            queryset = queryset.order_by(order)
+        return queryset
+
+    @strawberry.field
+    def league_by_page(
+        self,
+        info : Info,
+        limit: int = 0,
+        offset: int = 0
+    ) -> list[LeagueType]:
+        
+        """Get leagues with pagination. """
+        queryset = League.objects.all().order_by("id")
+        paginated_leagues = paginated_queryset(queryset, limit, offset)
+        return paginated_leagues
+        
     
     @strawberry.field
     def league_by_id(self,info : Info, id : strawberry.ID) -> LeagueType:

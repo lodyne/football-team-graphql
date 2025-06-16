@@ -1,16 +1,28 @@
-from .models import League, Player, Squad
+from .models import League, Player, Squad, Venue
 
 def create_squad_service(
     name : str, 
     size: int, 
     league_id :int, 
-    description: str) -> Squad:
+    description: str,
+    venue_id: int = None) -> Squad:
     
             try:
                 league = League.objects.get(id=league_id)
-            except League.DoesNotExist:
+            except (League.DoesNotExist, Venue.DoesNotExist):
                 raise ValueError(f"League with id {league_id} does not exist.")
-            squad = Squad.objects.create(name=name, size=size, description=description, league=league)
+            home_venue = None
+            if venue_id:
+                try:
+                    home_venue = Venue.objects.get(id=venue_id)
+                except Venue.DoesNotExist:
+                    raise ValueError(f"Venue with id {venue_id} does not exist.")
+            squad = Squad.objects.create(
+                name=name, 
+                size=size, 
+                description=description, 
+                league=league, 
+                home_venue=home_venue)   
             return squad
 
 def retrieve_player_with_specific_age(age: int) -> Player:

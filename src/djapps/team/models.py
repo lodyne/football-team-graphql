@@ -153,7 +153,7 @@ class Tournament(BaseModel):
         )
 
     class Meta:
-        db_table = "tornament"
+        db_table = "tournament"
         verbose_name = "Tornament"
         verbose_name_plural = "Tornaments"
         ordering = ["-created_at"]

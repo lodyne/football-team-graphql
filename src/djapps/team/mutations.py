@@ -26,6 +26,7 @@ from .types.django_types import(
 
 @strawberry.type
 class Mutation:
+    
     @strawberry.mutation
     def create_squad(
         self, 
@@ -33,13 +34,29 @@ class Mutation:
         size: int, 
         league_id: strawberry.ID,
         description: str = "", 
-        ) -> SquadType:
+        venue_id: strawberry.ID = None
+    ) -> SquadType:
         """
         Create a new squad.
-        
         """
-        squad = create_squad_service(name, size, league_id, description)
-    
+        try:
+            # Only check existence, don't pass model instances to the service
+            if venue_id is not None:
+                if not Venue.objects.filter(id=venue_id).exists():
+                    raise ValueError(f"Venue with id {venue_id} does not exist.")
+            if not League.objects.filter(id=league_id).exists():
+                raise ValueError(f"League with id {league_id} does not exist.")
+
+            squad = create_squad_service(
+                name, 
+                size, 
+                int(league_id), 
+                description, 
+                int(venue_id) if venue_id is not None else None
+            )
+        except Exception as e:
+            raise ValueError(f"An error occurred while creating the squad: {str(e)}")
+
         return squad
     
     @strawberry.mutation
@@ -89,6 +106,30 @@ class Mutation:
         """
         league = League.objects.create(name=name,country=country, description=description)
         return league
+    
+    @strawberry.mutation
+    def update_league(
+        self,
+        id: strawberry.ID,
+        name: str = None,
+        country: str = None,
+        description: str = None
+    ) -> LeagueType:
+        """
+        Update an existing league.
+        """
+        try:
+            league = League.objects.get(id=id)
+            if name is not None:
+                league.name = name
+            if country is not None:
+                league.country = country
+            if description is not None:
+                league.description = description
+            league.save()
+            return league
+        except League.DoesNotExist:
+            raise ValueError(f"League with id {id} does not exist.")
     
 
     @strawberry.mutation
