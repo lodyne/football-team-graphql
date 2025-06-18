@@ -1,6 +1,6 @@
 import strawberry
 
-from djapps.team.types.django_types import PlayerType 
+from djapps.team.types.django_types import CoachType, PlayerType 
 
 @strawberry.type
 class SquadType:
@@ -26,3 +26,9 @@ class PlayerList:
 class PlayerException:
     code: str
     message: str
+    
+@strawberry.type
+class CoachResponse:
+    ok: bool
+    message: str
+    coach: CoachType | None

@@ -1,9 +1,10 @@
 from datetime import datetime
 import strawberry
 
+from djapps.team.constants import COACH_CREATED_SUCCESS
 from djapps.team.exceptions import ErrorByIdResponse, ErrorException
 from djapps.team.services import create_squad_service
-from djapps.team.types.graphgql_types import DeleteItemResult
+from djapps.team.types.graphgql_types import CoachResponse, DeleteItemResult
 from .models import (
     League, 
     Player,
@@ -145,21 +146,30 @@ class Mutation:
         except League.DoesNotExist:
             raise ValueError(f"League with id {id} does not exist.")
         
+    
+
     @strawberry.mutation
     def create_coach(
-        self,
         name: str,
         squad_id: strawberry.ID
-    ) -> CoachType:
+    ) -> CoachResponse:
         """
         Create a new coach for a squad.
         """
         try:
             squad = Squad.objects.get(id=squad_id)
+            coach = Coach.objects.create(name=name, squad=squad)
+            return CoachResponse(
+                ok = True,
+                message = COACH_CREATED_SUCCESS,
+                coach = coach
+            )
         except Squad.DoesNotExist:
-            raise ValueError(f"Squad with id {squad_id} does not exist.")
-        coach = Coach.objects.create(name=name, squad=squad)
-        return coach
+            return CoachResponse(
+                ok=False,
+                message=f"Squad with id {squad_id} does not exist.",
+                coach=None
+            )
     
     @strawberry.mutation
     def update_coach(

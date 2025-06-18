@@ -74,6 +74,7 @@ class PlayerMatchType:
     
 @strawberry.django.type(Tournament)
 class TournamentType:
+    id: strawberry.ID
     name: str
     description: str
     squads: list[SquadType] = strawberry.django.field()

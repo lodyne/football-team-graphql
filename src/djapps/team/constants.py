@@ -1,0 +1,5 @@
+COACH_CREATED_SUCCESS = "Coach created successfully."
+COACH_UPDATED_SUCCESS = "Coach updated successfully."
+COACH_DELETED_SUCCESS = "Coach deleted successfully."
+PLAYER_CREATED_SUCCESS = "Player created successfully."
+PLAYER_UPDATED_SUCCESS = "Player updated successfully."     
