@@ -1,7 +1,9 @@
 import strawberry
 
-from .queries import Query
-from .mutations import Mutation
+from djapps.team.queries import Query
+
+
+from djapps.team.mutations import Mutation
 
 
 schema = strawberry.Schema(query=Query,mutation=Mutation)

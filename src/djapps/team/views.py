@@ -1,11 +1,12 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 from .schema import schema
 from strawberry.django.views import GraphQLView
 
 # Create your views here.
 
 def home(request):
-    return HttpResponse("<h1>Welcome to the Team Management GraphQL API</h1>")
+    template_name = "team/home.html"
+    return render(request, template_name)
 
 graphql_view = GraphQLView.as_view(
     schema = schema
