@@ -6,7 +6,8 @@ from djapps.team.utils import paginated_queryset
 from .models import (
     Coach, 
     League, 
-    Player, 
+    Player,
+    PlayerTournament, 
     Squad, 
     Tournament,
     Venue,
@@ -16,7 +17,8 @@ from strawberry.types import Info
 from .types.django_types import(
     CoachType,
     LeagueType, 
-    MatchType, 
+    MatchType,
+    PlayerTournamentType, 
     PlayerType, 
     SquadType, 
     TournamentType, 
@@ -262,4 +264,16 @@ class Query:
             return match
         except Match.DoesNotExist:
             raise ValueError(f"Match with id {id} does not exist.")
-        
+    
+    @strawberry.field
+    def player_tournament_list(
+        self, 
+        info: Info)  -> list['PlayerTournamentType'] :
+        """
+        Get all tournaments for a player.
+        """
+        try:
+            player_tournaments = PlayerTournament.objects.all()
+            return player_tournaments
+        except PlayerTournament.DoesNotExist:
+            raise ValueError("No tournaments found for player does not exist.")
