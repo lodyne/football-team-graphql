@@ -189,3 +189,9 @@ cython_debug/
 
 .DS_Store
 .vscode
+migrations/
+*.sqlite3
+*.sqlite
+*.db
+*.db-journal
+*.log
