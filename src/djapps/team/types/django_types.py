@@ -87,6 +87,7 @@ class SquadTournamentType:
     
 @strawberry.django.type(PlayerTournament)
 class PlayerTournamentType:
+    id: strawberry.ID
     player: PlayerType
     tournament: TournamentType
     goals: int
