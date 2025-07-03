@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "djapps.team",
-    "schema_viewer"
+    "schema_viewer",
 ]
 
 MIDDLEWARE = [
@@ -89,8 +89,8 @@ DATABASES = {
         "USER": config("DB_USER"),
         "PASSWORD": config("DB_PASSWORD"),
         "HOST": config("DB_HOST", default="localhost"),
-        "PORT": config("DB_PORT")
-    } 
+        "PORT": config("DB_PORT"),
+    }
 }
 
 
@@ -128,7 +128,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    BASE_DIR / "src/djapps/team/static",
+    # ...other static dirs...
+]
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
