@@ -167,7 +167,7 @@ class PlayerTournament(BaseModel):
         related_name='player_tournaments', 
         on_delete=models.CASCADE
         )
-    tornament = models.ForeignKey(
+    tournament = models.ForeignKey(
         Tournament, 
         related_name='tournament_players', 
         on_delete=models.CASCADE
@@ -206,7 +206,7 @@ class SquadTournament(BaseModel):
         )
     tournament = models.ForeignKey(
         Tournament, 
-        related_name='tornament_squads', 
+        related_name='tournament_squads', 
         on_delete=models.CASCADE
         )
 
