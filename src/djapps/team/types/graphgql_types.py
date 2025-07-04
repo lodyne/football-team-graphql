@@ -1,6 +1,6 @@
 import strawberry
 
-from djapps.team.types.django_types import CoachType, PlayerType 
+from djapps.team.types.django_types import CoachType, LeagueType, PlayerType 
 
 @strawberry.type
 class SquadType:
@@ -9,9 +9,6 @@ class SquadType:
     size:int
     description:str
     
-@strawberry.type
-class LeagueType:
-    pass
     
 @strawberry.type
 class DeleteItemResult:
@@ -32,3 +29,15 @@ class CoachResponse:
     ok: bool
     message: str
     coach: CoachType | None
+
+@strawberry.type
+class FieldError:
+    field: str
+    message: str
+    
+@strawberry.type
+class LeagueResponse:
+    ok: bool
+    message: str
+    league: LeagueType | None
+    errors: list[FieldError] | None = None

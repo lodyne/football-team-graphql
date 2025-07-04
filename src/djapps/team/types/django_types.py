@@ -17,9 +17,12 @@ import strawberry.django
 
 
 
-@strawberry.django.type(League, fields=("id", "name", "country", "description"))  
+@strawberry.django.type(League)  
 class LeagueType:
-    pass
+    id: strawberry.ID
+    name: str
+    country: str
+    description: str    
 
 @strawberry.django.type(Squad)
 class SquadType:
