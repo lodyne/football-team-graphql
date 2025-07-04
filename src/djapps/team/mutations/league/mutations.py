@@ -1,7 +1,7 @@
 import strawberry
 
 
-from djapps.team.types.graphgql_types import  DeleteItemResult
+from djapps.team.types.graphgql_types import  DeleteItemResult, FieldError, LeagueResponse
 from djapps.team.types.django_types import LeagueType
 from djapps.team.models import  League
     
@@ -12,12 +12,40 @@ class Mutation:
     
 
     @strawberry.mutation
-    def create_league(self, name: str, country: str, description: str) -> LeagueType:
+    def create_league(self, name: str, country: str, description: str) -> LeagueResponse:
         """
         Create a new league.
         """
+        existing = League.objects.filter(name=name, country=country).first()
+        
+        if existing:
+            return LeagueResponse(
+                ok=False,
+                message=f"A league named {name} already exists in {country}.",
+                league=LeagueType(
+                    id=existing.id,
+                    name=existing.name,
+                    country=existing.country,
+                    description=existing.description  
+                ) ,
+                errors=[FieldError(field="name", message=f"{name}, already exists.")]
+            )
+            # raise ValueError(f"League with name {name} in country {country} already exists.")
         league = League.objects.create(name=name,country=country, description=description)
-        return league
+        
+        response = LeagueResponse(
+            ok=True,
+            message=f"{league.name}  created successfully.",
+            league=LeagueType(
+                id=league.id,
+                name=league.name,
+                country=league.country,
+                description=league.description
+            ),
+            errors=[]
+        )
+        
+        return response
     
     @strawberry.mutation
     def update_league(
